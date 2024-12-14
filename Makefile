@@ -6,7 +6,7 @@ run: out/ge
 
 
 out/ge: $(files)
-	clang -Wall -Werror -o out/ge $(files) $(shell pkg-config --cflags --libs sdl2) -lSDL2_image -lSDL2_ttf -lm
+	gcc -Wall -Werror -o out/ge $(files) $(shell pkg-config --cflags --libs sdl2) -lSDL2_image -lSDL2_ttf -lm
 
 
 dbg: $(files)

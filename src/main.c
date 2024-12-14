@@ -6,9 +6,11 @@
 
 #include "common.h"
 #include "core.h"
+#include "event.h"
 #include "file.h"
 #include "list.h"
 #include "sprite.h"
+#include "test.h"
 
 
 int main() {
@@ -17,62 +19,24 @@ int main() {
 
   list_char_t buf;
   list_init(&buf);
-  GE_Sprite *sprite = NULL;
 
-  SDL_Event event;
-  bool done = false;
+  GE_load();
+
   for (;;) {
-    while (SDL_PollEvent(&event)) {
-      switch (event.type) {
-        case SDL_QUIT:
-          done = true;
-          break;
+    GE_handleEvents();
+    if (GE_event(GE_E_QUIT)) break;
 
-        case SDL_KEYDOWN:
-          switch (event.key.keysym.sym) {
-            case SDLK_e:
-              SDL_StartTextInput();
-              break;
-
-            case SDLK_RETURN:
-              SDL_StopTextInput();
-              list_push(&buf, '\0');
-              printf("\n%s\n", buf.data);
-              if (sprite != NULL) GE_Sprite_free(sprite);
-              sprite = NULL;
-              if (!GE_fileExists(buf.data)) {
-                fprintf(stderr, "File does not exist.\n");
-              }
-              else {
-                sprite = GE_Sprite_new(buf.data);
-              }
-              list_clear(&buf);
-              break;
-          }
-          break;
-
-        case SDL_TEXTINPUT:
-          for (int _ = 0; _ < strlen(event.text.text); _++) {
-            list_push(&buf, '\0');
-            printf("%c", event.text.text[_]);
-            fflush(stdout);
-          }
-          strcat(buf.data, event.text.text);
-          break;
-      }
-    }
-
-    if (done) break;
+    GE_update();
 
     if (SDL_SetRenderDrawColor(GE_renderer(), 0, 0, 0, 255) != 0) SDL_ERR();
     if (SDL_RenderClear(GE_renderer()) != 0) SDL_ERR();
 
-    if (sprite != NULL) GE_Sprite_draw(sprite);
+    GE_draw();
 
     SDL_RenderPresent(GE_renderer());
   }
 
-  if (sprite != NULL) GE_Sprite_free(sprite);
+  GE_unload();
 
   GE_quit();
   return 0;

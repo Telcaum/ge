@@ -20,6 +20,13 @@
 } while (0)
 
 
+#define list_from_array(l, arr, arr_len) do { \
+  list_init(l); \
+  for (int i = 0; i < (arr_len); i++) { \
+    list_push((l), (arr)[i]); \
+} while (0)
+
+
 #define list_free(l) do { \
   free((l)->data); \
   (l)->length = 0; \
@@ -45,6 +52,13 @@
 
 
 #define list_clear(l) do { (l)->length = 0; } while (0)
+
+
+#define list_append_array(l, arr, len) do { \
+  for (int i = 0; i < (len); i++) { \
+    list_push((l), (arr)[i]); \
+  } \
+} while (0)
 
 
 typedef list_t(int) list_int_t;
