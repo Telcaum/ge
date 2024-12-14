@@ -13,7 +13,7 @@
 #include "test.h"
 
 
-int main() {
+int main() { // test
   GE_init("test", 800, 450);
   SDL_StopTextInput();
 
