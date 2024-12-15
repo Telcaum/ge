@@ -2,6 +2,7 @@ files := $(wildcard src/*.c)
 
 
 run: out/ge
+	clear
 	./out/ge
 
 

@@ -5,6 +5,9 @@
 #include "core.h"
 
 
+extern int _GE_MAIN_fps;
+
+
 static SDL_Window *g_window = NULL;
 static SDL_Renderer *g_renderer = NULL;
 
@@ -48,4 +51,9 @@ void GE_quit(void) {
 
 SDL_Renderer *GE_renderer(void) {
   return g_renderer;
+}
+
+
+void GE_setFPS(int fps) {
+  _GE_MAIN_fps = fps;
 }

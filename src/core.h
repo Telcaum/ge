@@ -9,3 +9,5 @@ void GE_init(char const *title, int w, int h);
 void GE_quit(void);
 
 SDL_Renderer *GE_renderer(void);
+
+void GE_setFPS(int fps);
