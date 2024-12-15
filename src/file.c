@@ -30,7 +30,7 @@ char *GE_readFile(char const *path) {
   if (bytes_read < length) {
     fprintf(stderr, "Failed to read file '%s'.\n", path);
     exit(1);
-  }+
+  }
 
   fclose(file);
   buf[length] = '\0';

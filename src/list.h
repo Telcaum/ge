@@ -61,5 +61,11 @@
 } while (0)
 
 
+#define list_foreach(l, i, var) \
+  for ((i) = 0; (i) < (l)->length && ((var) = (l)->data[(i)], 1); (i)++)
+#define list_foreach_ptr(l, i, var) \
+  for ((i) = 0; (i) < (l)->length && ((var) = &(l)->data[(i)], 1); (i)++)
+
+
 typedef list_t(int) list_int_t;
 typedef list_t(char) list_char_t;

@@ -10,4 +10,6 @@ void GE_quit(void);
 
 SDL_Renderer *GE_renderer(void);
 
+// Caps the amount of FPS
+// -1 is no cap
 void GE_setFPS(int fps);

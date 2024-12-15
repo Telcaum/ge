@@ -61,6 +61,17 @@ void GE_Sprite_draw(GE_Sprite *sprite) {
 }
 
 
+void GE_Sprite_setPos(GE_Sprite *sprite, int x, int y) {
+  sprite->rect.x = x;
+  sprite->rect.y = y;
+}
+
+
+GE_Vec2 GE_Sprite_getPos(GE_Sprite *sprite) {
+  return GE_TO_VEC2(sprite->rect.x, sprite->rect.y);
+}
+
+
 void GE_Sprite_setScale(GE_Sprite *sprite, double scale) {
   sprite->scale = scale;
 }

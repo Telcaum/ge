@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "core.h"
+#include "event.h"
 
 
 extern int _GE_MAIN_fps;
@@ -22,6 +23,8 @@ void GE_init(char const *title, int w, int h) {
   if (TTF_Init() != 0) {
     SDL_ERR();
   }
+
+  GE_initEvents();
 
   g_window = SDL_CreateWindow(
     title,
