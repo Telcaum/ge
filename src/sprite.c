@@ -7,6 +7,9 @@
 #include "sprite.h"
 
 
+static char g_err_msg[64];
+
+
 struct GE_Sprite {
   SDL_Texture *texture;
   SDL_Rect rect;
@@ -20,9 +23,15 @@ struct GE_SpriteX {
 };
 
 
-GE_Sprite *GE_Sprite_new(char const *path, int x, int y, bool centered, double scale) {
+GE_SpriteOrErr GE_Sprite_new(char const *path, int x, int y, bool centered, double scale) {
   SDL_Surface *surface = IMG_Load(path);
-  if (surface == NULL) SDL_ERR();
+  if (surface == NULL) {
+    SDL_GetErrorMsg(g_err_msg, 64);
+    return (GE_SpriteOrErr){
+      .err = GE_ERR_ERR,
+      .value.msg = g_err_msg,
+    };
+  }
   SDL_Texture *texture = SDL_CreateTextureFromSurface(GE_renderer(), surface);
   if (texture == NULL) SDL_ERR();
 
@@ -37,7 +46,10 @@ GE_Sprite *GE_Sprite_new(char const *path, int x, int y, bool centered, double s
   sprite->scale = scale;
 
   SDL_FreeSurface(surface);
-  return sprite;
+  return (GE_SpriteOrErr){
+    .err = GE_ERR_OK,
+    .value.sprite = sprite,
+  };
 }
 
 
@@ -82,14 +94,24 @@ double GE_Sprite_getScale(GE_Sprite *sprite) {
 }
 
 
-GE_SpriteX *GE_SpriteX_new(char const *path, int x, int y, bool centered, double scale, double angle) {
-  GE_SpriteX *sprite = (GE_SpriteX *)GE_Sprite_new(path, x, y, centered, scale);
+GE_SpriteXOrErr GE_SpriteX_new(char const *path, int x, int y, bool centered, double scale, double angle) {
+  GE_SpriteOrErr sprite_or_err = GE_Sprite_new(path, x, y, centered, scale);
+  if (sprite_or_err.err) {
+    return (GE_SpriteXOrErr){
+      .err = sprite_or_err.err,
+      .value.msg = g_err_msg,
+    };
+  }
+  GE_SpriteX *sprite = (GE_SpriteX *)sprite_or_err.value.sprite;
   sprite = realloc(sprite, sizeof(GE_SpriteX));
   if (sprite == NULL) exit(1);
 
   sprite->angle = angle;
 
-  return sprite;
+  return (GE_SpriteXOrErr){
+    .err = GE_ERR_OK,
+    .value.sprite = sprite,
+  };
 }
 
 

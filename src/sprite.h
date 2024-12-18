@@ -2,14 +2,31 @@
 
 #include <stdbool.h>
 
+#include "error.h"
 #include "vec2.h"
 
 
 typedef struct GE_Sprite GE_Sprite;
 typedef struct GE_SpriteX GE_SpriteX;
 
+typedef struct {
+  GE_Error err;
+  union {
+    GE_Sprite *sprite;
+    char const *msg;
+  } value;
+} GE_SpriteOrErr;
 
-GE_Sprite *GE_Sprite_new(char const *path, int x, int y, bool centered, double scale);
+typedef struct {
+  GE_Error err;
+  union {
+    GE_SpriteX *sprite;
+    char const *msg;
+  } value;
+} GE_SpriteXOrErr;
+
+
+GE_SpriteOrErr GE_Sprite_new(char const *path, int x, int y, bool centered, double scale);
 void GE_Sprite_free(GE_Sprite *sprite);
 void GE_Sprite_draw(GE_Sprite *sprite);
 
@@ -19,7 +36,7 @@ void GE_Sprite_setScale(GE_Sprite *sprite, double scale);
 double GE_Sprite_getScale(GE_Sprite *sprite);
 
 
-GE_SpriteX *GE_SpriteX_new(char const *path, int x, int y, bool centered, double scale, double angle);
+GE_SpriteXOrErr GE_SpriteX_new(char const *path, int x, int y, bool centered, double scale, double angle);
 #define GE_SpriteX_free(sprite) GE_Sprite_free((GE_Sprite *)(sprite))
 void GE_SpriteX_draw(GE_SpriteX *sprite);
 

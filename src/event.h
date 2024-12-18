@@ -28,3 +28,6 @@ void GE_stopTextInput(void);
 char const *GE_textInput(void);
 GE_Vec2 GE_getMousePos(void);
 bool GE_keyDown(SDL_Keycode k);
+bool GE_keyUp(SDL_Keycode k);
+bool GE_physicalKeyDown(SDL_Scancode k);
+bool GE_physicalKeyUp(SDL_Scancode k);

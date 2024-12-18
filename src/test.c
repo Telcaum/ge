@@ -36,15 +36,14 @@ void GE_load(void) {
 static void placeNewSprite(void) {
   list_push(&g_input_buffer, '\0');
 
-  if (!GE_fileExists(g_input_buffer.data)) {
-    fprintf(stderr, "File '%s' does not exist.\n", g_input_buffer.data);
+  GE_SpriteXOrErr sprite_or_err = GE_SpriteX_new(g_input_buffer.data, GE_FROM_VEC2(g_mouse), true, .5, 0.);
+  if (sprite_or_err.err) {
+    fprintf(stderr, "Error: %s\n", sprite_or_err.value.msg);
     list_clear(&g_input_buffer);
     g_update_callback = updateDefault;
     return;
   }
-
-  GE_SpriteX *sprite = GE_SpriteX_new(g_input_buffer.data, GE_FROM_VEC2(g_mouse), true, .5, 0.);
-  list_push(&g_sprites, sprite);
+  list_push(&g_sprites, sprite_or_err.value.sprite);
   list_clear(&g_input_buffer);
 
   g_update_callback = updateDefault;
@@ -60,7 +59,7 @@ static void listenForSpritePath(double dt) {
     fflush(stdout);
   }
 
-  if (GE_keyDown(SDLK_KP_ENTER)) {
+  if (GE_keyDown(SDLK_RETURN)) {
     puts("");
     placeNewSprite();
     return;
@@ -80,6 +79,11 @@ static void updateDefault(double dt) {
     startPlacingNewSprite();
     return;
   }
+
+  if (GE_physicalKeyDown(SDL_SCANCODE_W)) puts("up");
+  if (GE_physicalKeyDown(SDL_SCANCODE_A)) puts("left");
+  if (GE_physicalKeyDown(SDL_SCANCODE_S)) puts("down");
+  if (GE_physicalKeyDown(SDL_SCANCODE_D)) puts("right");
 }
 
 
